@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Sheikh Asif Madani</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="arabic-logo">﷽</span>
+        <span class="logo-text">Sheikh Asif Madani</span>
+      </a>
+      <button class="nav-toggle" id="navToggle">&#9776;</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="teachings.html">Teachings</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="research.html">Research</a></li>
+        <li><a href="books.html">Books</a></li>
+        <li><a href="qa.html">Q&amp;A</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>✉️ Contact</h1>
+    <p>For speaking engagements, collaborations, or general enquiries.</p>
+  </div>
+
+  <main class="container page-content">
+
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:1.5rem;">
+          Sheikh Asif Madani welcomes enquiries from students, institutions, and organisations worldwide.
+        </p>
+        <div class="contact-item">
+          <span>📧</span>
+          <span>Email will be listed here once configured.</span>
+        </div>
+        <div class="contact-item">
+          <span>🕌</span>
+          <span>Available for lectures, khutbahs, and seminars — please use the form to enquire.</span>
+        </div>
+        <div class="contact-item">
+          <span>🌐</span>
+          <span>Online consultations and remote lectures available globally.</span>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h2>Send a Message</h2>
+        <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <!-- Replace YOUR_FORM_ID with your Formspree ID -->
+          <div class="form-group">
+            <label for="cname">Your Name</label>
+            <input type="text" id="cname" name="name" required placeholder="Full name" />
+          </div>
+          <div class="form-group">
+            <label for="cemail">Email Address</label>
+            <input type="email" id="cemail" name="email" required placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="csubject">Subject</label>
+            <input type="text" id="csubject" name="subject" placeholder="e.g. Speaking Engagement Request" />
+          </div>
+          <div class="form-group">
+            <label for="cmessage">Message</label>
+            <textarea id="cmessage" name="message" required placeholder="Your message..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message ➜</button>
+          <div class="submitted-msg" id="contactMsg">
+            ✅ JazakAllahu Khayran! Your message has been received. We will get back to you soon, insha'Allah.
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-arabic">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+      <p>© 2025 Sheikh Asif Madani. All rights reserved.</p>
+      <p class="footer-links">
+        <a href="teachings.html">Teachings</a> &middot;
+        <a href="videos.html">Videos</a> &middot;
+        <a href="research.html">Research</a> &middot;
+        <a href="books.html">Books</a> &middot;
+        <a href="qa.html">Q&amp;A</a> &middot;
+        <a href="contact.html">Contact</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
