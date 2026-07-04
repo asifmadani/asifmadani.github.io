@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <div id="google_translate_element" style="display:none;"></div>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay:false }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
 
@@ -25,7 +32,15 @@
         <li><a href="books.html" class="active">Books</a></li>
         <li><a href="qa.html">Q&amp;A</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li class="lang-item">
+          <button class="lang-btn" id="langBtn">🌐 <span>English</span></button>
+          <div class="lang-dropdown" id="langDropdown"></div>
+        </li>
       </ul>
+      <div class="nav-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="nav-social-icon yt" title="YouTube">▶</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="nav-social-icon tg" title="Telegram">✈</a>
+      </div>
     </div>
   </nav>
 
@@ -35,61 +50,59 @@
   </div>
 
   <main class="container page-content">
-
     <h2 class="section-heading">Books by Sheikh Asif Madani</h2>
 
     <!--
       TO ADD A BOOK:
       1. Upload the PDF to the /files/ folder in your repository
-      2. Copy one pub-card block below
-      3. Update the title, description, year, and the href in the download link
+      2. Copy one pub-card block below and update the title, description, year, and href
     -->
-
     <div class="pub-list">
-
       <div class="pub-card">
         <div class="pub-icon">📗</div>
         <div class="pub-info">
           <h3>Book Title — To be added</h3>
           <p>Upload your book PDF and update this section with the title, description, and a download link.</p>
           <span style="color:var(--text-light);font-size:0.82rem;">Year of Publication</span><br/><br/>
-          <span class="btn-download" style="opacity:0.5;cursor:default;">Download PDF</span>
+          <span class="btn-download" style="opacity:0.4;cursor:default;">Download PDF</span>
         </div>
       </div>
-
       <div class="pub-card">
         <div class="pub-icon">📘</div>
         <div class="pub-info">
           <h3>Book Title — To be added</h3>
           <p>Upload your book PDF and update this section with the title, description, and a download link.</p>
           <span style="color:var(--text-light);font-size:0.82rem;">Year of Publication</span><br/><br/>
-          <span class="btn-download" style="opacity:0.5;cursor:default;">Download PDF</span>
+          <span class="btn-download" style="opacity:0.4;cursor:default;">Download PDF</span>
         </div>
       </div>
-
     </div>
 
     <div class="upload-note" style="margin-top:2rem;">
-      <strong>To add your books:</strong><br/>
-      Upload PDF files to the <code>files/</code> folder in your GitHub repository, then share the book titles and I will update this page with proper download links and descriptions.
+      <strong>To add your books:</strong> Upload PDF files to the <code>files/</code> folder in your GitHub repository, then share the book titles with me and I will update this page with proper download links and descriptions.
     </div>
-
   </main>
 
   <footer class="footer">
     <div class="container">
       <p class="footer-arabic">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+      <div class="footer-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="yt-link">▶ YouTube</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="tg-link">✈ Telegram</a>
+      </div>
       <p>© 2025 Sheikh Asif Madani. All rights reserved.</p>
       <p class="footer-links">
-        <a href="teachings.html">Teachings</a> &middot;
-        <a href="videos.html">Videos</a> &middot;
-        <a href="research.html">Research</a> &middot;
-        <a href="books.html">Books</a> &middot;
-        <a href="qa.html">Q&amp;A</a> &middot;
-        <a href="contact.html">Contact</a>
+        <a href="teachings.html">Teachings</a> &middot; <a href="videos.html">Videos</a> &middot;
+        <a href="research.html">Research</a> &middot; <a href="books.html">Books</a> &middot;
+        <a href="qa.html">Q&amp;A</a> &middot; <a href="contact.html">Contact</a>
       </p>
     </div>
   </footer>
+
+  <div class="float-social">
+    <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="float-btn yt" title="YouTube">▶</a>
+    <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="float-btn tg" title="Telegram">✈</a>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <div id="google_translate_element" style="display:none;"></div>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay:false }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
 
@@ -25,7 +32,15 @@
         <li><a href="books.html">Books</a></li>
         <li><a href="qa.html">Q&amp;A</a></li>
         <li><a href="contact.html" class="active">Contact</a></li>
+        <li class="lang-item">
+          <button class="lang-btn" id="langBtn">🌐 <span>English</span></button>
+          <div class="lang-dropdown" id="langDropdown"></div>
+        </li>
       </ul>
+      <div class="nav-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="nav-social-icon yt" title="YouTube">▶</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="nav-social-icon tg" title="Telegram">✈</a>
+      </div>
     </div>
   </nav>
 
@@ -35,7 +50,6 @@
   </div>
 
   <main class="container page-content">
-
     <div class="contact-grid">
 
       <div class="contact-info">
@@ -44,8 +58,12 @@
           Sheikh Asif Madani welcomes enquiries from students, institutions, and organisations worldwide.
         </p>
         <div class="contact-item">
-          <span>📧</span>
-          <span>Email will be listed here once configured.</span>
+          <span>✈</span>
+          <span><a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" style="color:var(--green-mid);">Join our Telegram Channel</a> — fastest way to reach us and ask questions.</span>
+        </div>
+        <div class="contact-item">
+          <span>▶</span>
+          <span><a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" style="color:var(--green-mid);">Subscribe on YouTube</a> — Darul Ilm channel for lectures and reminders.</span>
         </div>
         <div class="contact-item">
           <span>🕌</span>
@@ -55,12 +73,16 @@
           <span>🌐</span>
           <span>Online consultations and remote lectures available globally.</span>
         </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:1.5rem;">
+          <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="btn-yt" style="justify-content:center;">▶ Subscribe on YouTube</a>
+          <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="btn-tg" style="justify-content:center;">✈ Join Telegram Channel</a>
+        </div>
       </div>
 
       <div class="contact-form">
         <h2>Send a Message</h2>
         <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-          <!-- Replace YOUR_FORM_ID with your Formspree ID -->
           <div class="form-group">
             <label for="cname">Your Name</label>
             <input type="text" id="cname" name="name" required placeholder="Full name" />
@@ -90,17 +112,23 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-arabic">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+      <div class="footer-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="yt-link">▶ YouTube</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="tg-link">✈ Telegram</a>
+      </div>
       <p>© 2025 Sheikh Asif Madani. All rights reserved.</p>
       <p class="footer-links">
-        <a href="teachings.html">Teachings</a> &middot;
-        <a href="videos.html">Videos</a> &middot;
-        <a href="research.html">Research</a> &middot;
-        <a href="books.html">Books</a> &middot;
-        <a href="qa.html">Q&amp;A</a> &middot;
-        <a href="contact.html">Contact</a>
+        <a href="teachings.html">Teachings</a> &middot; <a href="videos.html">Videos</a> &middot;
+        <a href="research.html">Research</a> &middot; <a href="books.html">Books</a> &middot;
+        <a href="qa.html">Q&amp;A</a> &middot; <a href="contact.html">Contact</a>
       </p>
     </div>
   </footer>
+
+  <div class="float-social">
+    <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="float-btn yt" title="YouTube">▶</a>
+    <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="float-btn tg" title="Telegram">✈</a>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

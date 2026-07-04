@@ -8,6 +8,19 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Google Translate (hidden — controlled by custom language switcher) -->
+  <div id="google_translate_element" style="display:none;"></div>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
 
@@ -18,7 +31,9 @@
         <span class="arabic-logo">﷽</span>
         <span class="logo-text">Sheikh Asif Madani</span>
       </a>
+
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="teachings.html">Teachings</a></li>
@@ -27,7 +42,18 @@
         <li><a href="books.html">Books</a></li>
         <li><a href="qa.html">Q&amp;A</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <!-- Language Switcher -->
+        <li class="lang-item">
+          <button class="lang-btn" id="langBtn">🌐 <span>English</span></button>
+          <div class="lang-dropdown" id="langDropdown"></div>
+        </li>
       </ul>
+
+      <!-- Social Icons (desktop) -->
+      <div class="nav-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="nav-social-icon yt" title="YouTube — Darul Ilm">▶</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="nav-social-icon tg" title="Telegram Channel">✈</a>
+      </div>
     </div>
   </nav>
 
@@ -60,43 +86,42 @@
     <h2 class="section-heading">What You Will Find Here</h2>
 
     <div class="cards-grid">
-
       <a href="teachings.html" class="card">
         <div class="card-icon">📖</div>
         <h3>Teachings</h3>
         <p>In-depth lessons on Aqeedah, Fiqh, Tafsir, Hadith, and Islamic ethics drawn from classical scholarship.</p>
       </a>
-
       <a href="videos.html" class="card">
         <div class="card-icon">🎥</div>
         <h3>Videos</h3>
         <p>Lectures, khutbahs, and short reminders — watch and share with family and students.</p>
       </a>
-
       <a href="research.html" class="card">
         <div class="card-icon">🔬</div>
         <h3>Research</h3>
         <p>Peer-reviewed and original research papers on Islamic sciences, history, and contemporary issues.</p>
       </a>
-
       <a href="books.html" class="card">
         <div class="card-icon">📚</div>
         <h3>Books</h3>
         <p>Published works available for download — covering Quran, Sunnah, Fiqh, and spiritual development.</p>
       </a>
-
       <a href="qa.html" class="card">
         <div class="card-icon">💬</div>
         <h3>Q&amp;A</h3>
         <p>Submit your questions on Islamic matters and receive answers grounded in Quran and authentic Sunnah.</p>
       </a>
-
       <a href="contact.html" class="card">
         <div class="card-icon">✉️</div>
         <h3>Contact</h3>
         <p>Reach out for speaking engagements, collaborations, or general enquiries.</p>
       </a>
+    </div>
 
+    <!-- Social CTA -->
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:3rem;">
+      <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="btn-yt">▶ Subscribe on YouTube</a>
+      <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="btn-tg">✈ Join Telegram Channel</a>
     </div>
   </main>
 
@@ -112,6 +137,10 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-arabic">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+      <div class="footer-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="yt-link">▶ YouTube</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="tg-link">✈ Telegram</a>
+      </div>
       <p>© 2025 Sheikh Asif Madani. All rights reserved.</p>
       <p class="footer-links">
         <a href="teachings.html">Teachings</a> &middot;
@@ -123,6 +152,12 @@
       </p>
     </div>
   </footer>
+
+  <!-- Floating social buttons -->
+  <div class="float-social">
+    <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="float-btn yt" title="YouTube">▶</a>
+    <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="float-btn tg" title="Telegram">✈</a>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

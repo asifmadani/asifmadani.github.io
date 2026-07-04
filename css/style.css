@@ -42,6 +42,16 @@ img { max-width: 100%; display: block; }
 }
 
 /* ============================================
+   SUPPRESS GOOGLE TRANSLATE TOOLBAR
+   ============================================ */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+body { top: 0px !important; }
+#goog-gt-tt { display: none !important; }
+.goog-te-balloon-frame { display: none !important; }
+.goog-tooltip { display: none !important; }
+.goog-te-spinner-pos { display: none !important; }
+
+/* ============================================
    NAVBAR
    ============================================ */
 .navbar {
@@ -54,13 +64,14 @@ img { max-width: 100%; display: block; }
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 1.5rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .nav-logo {
@@ -111,6 +122,139 @@ img { max-width: 100%; display: block; }
   font-size: 1.6rem;
   cursor: pointer;
 }
+
+/* ============================================
+   NAV SOCIAL ICONS
+   ============================================ */
+.nav-social {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.nav-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  transition: background 0.2s, transform 0.2s;
+  color: var(--white);
+}
+
+.nav-social-icon:hover { transform: scale(1.12); }
+.nav-social-icon.yt  { background: rgba(255,0,0,0.18); }
+.nav-social-icon.yt:hover { background: #ff0000; }
+.nav-social-icon.tg  { background: rgba(0,136,204,0.22); }
+.nav-social-icon.tg:hover { background: #0088cc; }
+
+/* ============================================
+   LANGUAGE SWITCHER
+   ============================================ */
+.lang-item {
+  position: relative;
+  list-style: none;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: var(--white);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.83rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.lang-btn:hover { background: rgba(255,255,255,0.2); }
+
+.lang-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  padding: 0.5rem;
+  width: 220px;
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 9999;
+  scrollbar-width: thin;
+}
+
+.lang-dropdown.open { display: block; }
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.15s;
+  gap: 0.5rem;
+}
+
+.lang-option:hover { background: var(--cream); }
+.lang-option.active { background: var(--cream-dark); }
+
+.lang-native {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  font-family: var(--font-arabic);
+}
+
+.lang-english {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-left: auto;
+}
+
+/* ============================================
+   FLOATING SOCIAL BAR
+   ============================================ */
+.float-social {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.8rem;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.float-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.float-btn:hover { transform: scale(1.12); box-shadow: 0 6px 22px rgba(0,0,0,0.3); }
+.float-btn.yt { background: #ff0000; }
+.float-btn.tg { background: #0088cc; }
 
 /* ============================================
    HERO
@@ -672,8 +816,90 @@ img { max-width: 100%; display: block; }
 .footer-links a:hover { color: var(--gold-light); }
 
 /* ============================================
+   YOUTUBE CHANNEL BANNER
+   ============================================ */
+.yt-banner {
+  background: linear-gradient(135deg, #1a1a1a, #2d0000);
+  border-radius: var(--radius);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.yt-banner-icon { font-size: 3rem; flex-shrink: 0; }
+
+.yt-banner-text h3 { color: var(--white); font-size: 1.1rem; margin-bottom: 0.3rem; }
+.yt-banner-text p  { color: rgba(255,255,255,0.65); font-size: 0.88rem; }
+
+.btn-yt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ff0000;
+  color: var(--white);
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.2s;
+  margin-left: auto;
+}
+
+.btn-yt:hover { background: #cc0000; transform: scale(1.04); }
+
+.btn-tg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0088cc;
+  color: var(--white);
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-tg:hover { background: #006699; transform: scale(1.04); }
+
+/* ============================================
+   FOOTER SOCIAL ROW
+   ============================================ */
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--white);
+  transition: opacity 0.2s;
+}
+
+.footer-social a:hover { opacity: 0.85; }
+.footer-social .yt-link { background: #ff0000; }
+.footer-social .tg-link { background: #0088cc; }
+
+/* ============================================
    RESPONSIVE
    ============================================ */
+@media (max-width: 900px) {
+  .nav-social { display: none; }
+}
+
 @media (max-width: 768px) {
   .nav-toggle { display: block; }
 
@@ -687,10 +913,16 @@ img { max-width: 100%; display: block; }
     padding: 1rem 1.5rem 1.5rem;
     gap: 0.25rem;
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    z-index: 999;
   }
 
   .nav-links.open { display: flex; }
   .nav-links a { padding: 0.6rem 0.8rem; }
 
+  .lang-dropdown { right: auto; left: 0; }
+
   .contact-grid { grid-template-columns: 1fr; }
+
+  .yt-banner { flex-direction: column; }
+  .btn-yt { margin-left: 0; }
 }

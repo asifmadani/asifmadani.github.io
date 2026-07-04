@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <div id="google_translate_element" style="display:none;"></div>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay:false }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
 
@@ -25,7 +32,15 @@
         <li><a href="books.html">Books</a></li>
         <li><a href="qa.html" class="active">Q&amp;A</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li class="lang-item">
+          <button class="lang-btn" id="langBtn">🌐 <span>English</span></button>
+          <div class="lang-dropdown" id="langDropdown"></div>
+        </li>
       </ul>
+      <div class="nav-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="nav-social-icon yt" title="YouTube">▶</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="nav-social-icon tg" title="Telegram">✈</a>
+      </div>
     </div>
   </nav>
 
@@ -40,21 +55,33 @@
       <div class="qa-intro">
         <p>
           <strong>بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</strong><br/><br/>
-          You are welcome to submit questions on any Islamic matter — Aqeedah, Fiqh, Tafsir, Hadith, ethics, or contemporary issues. Sheikh Asif Madani will respond based on the Quran and authentic Sunnah. Selected answers will be published below for the benefit of all.
+          You are welcome to submit questions on any Islamic matter — Aqeedah, Fiqh, Tafsir, Hadith, ethics, or contemporary issues.
+          Sheikh Asif Madani will respond based on the Quran and authentic Sunnah.
+          <strong>Your question is sent directly to the Telegram channel</strong> so that Sheikh can respond promptly.
+          You can also ask directly on
+          <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" style="color:var(--green-mid);">Telegram ✈</a>.
         </p>
       </div>
 
       <!-- SUBMIT QUESTION FORM -->
       <div class="qa-form">
         <h2>Ask a Question</h2>
-        <form id="qaForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-          <!-- Replace YOUR_FORM_ID with your Formspree ID for live email delivery -->
+        <!--
+          TELEGRAM BOT SETUP (one-time, takes 2 minutes):
+          1. Open Telegram → search @BotFather → type /newbot → follow steps → copy the TOKEN
+          2. Add that bot to your Telegram group/channel as an admin
+          3. Send a message in the group then visit:
+             https://api.telegram.org/bot<TOKEN>/getUpdates
+             Copy the "chat" → "id" value (your CHAT_ID)
+          4. Open js/main.js and paste TOKEN into TG_TOKEN and CHAT_ID into TG_CHAT_ID
+        -->
+        <form id="qaForm">
           <div class="form-group">
             <label for="name">Your Name</label>
             <input type="text" id="name" name="name" placeholder="e.g. Abdullah Ahmed" required />
           </div>
           <div class="form-group">
-            <label for="email">Email Address (optional — for personal reply)</label>
+            <label for="email">Email Address <span style="font-weight:400;color:var(--text-light);">(optional)</span></label>
             <input type="email" id="email" name="email" placeholder="your@email.com" />
           </div>
           <div class="form-group">
@@ -78,10 +105,15 @@
             <textarea id="question" name="question" placeholder="Write your question here..." required></textarea>
           </div>
           <button type="submit" class="form-submit">Submit Question ➜</button>
-          <div class="submitted-msg" id="submittedMsg">
-            ✅ JazakAllahu Khayran! Your question has been submitted. Please allow some time for a response.
-          </div>
+          <div class="submitted-msg" id="submittedMsg"></div>
         </form>
+
+        <div style="margin-top:1.25rem;padding:1rem;background:var(--cream);border-radius:8px;text-align:center;">
+          <p style="font-size:0.88rem;color:var(--text-mid);">
+            You can also ask your question directly on our Telegram channel:<br/>
+            <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="btn-tg" style="display:inline-flex;margin-top:0.6rem;">✈ Join Telegram Channel</a>
+          </p>
+        </div>
       </div>
 
       <!-- PUBLISHED Q&A -->
@@ -124,7 +156,7 @@
             <span class="qa-toggle">+</span>
           </div>
           <div class="qa-answer">
-            <p>The essential conditions for a valid Nikah are: (1) <strong>Offer and Acceptance</strong> — clear proposal and acceptance from both parties; (2) <strong>Wali</strong> — the presence and consent of the bride's guardian; (3) <strong>Two Witnesses</strong> — at least two adult Muslim witnesses; (4) <strong>Mahr</strong> — a dowry agreed upon and given to the bride. Both parties must also be of sound mind and free from legal impediments (such as being related by blood within prohibited degrees). A Nikah conducted in secret without a Wali is invalid according to the majority of scholars.</p>
+            <p>The essential conditions for a valid Nikah are: (1) <strong>Offer and Acceptance</strong> — clear proposal and acceptance from both parties; (2) <strong>Wali</strong> — the presence and consent of the bride's guardian; (3) <strong>Two Witnesses</strong> — at least two adult Muslim witnesses; (4) <strong>Mahr</strong> — a dowry agreed upon and given to the bride. Both parties must also be of sound mind and free from legal impediments. A Nikah conducted in secret without a Wali is invalid according to the majority of scholars.</p>
           </div>
         </div>
 
@@ -135,17 +167,23 @@
   <footer class="footer">
     <div class="container">
       <p class="footer-arabic">جَزَاكُمُ اللَّهُ خَيْرًا</p>
+      <div class="footer-social">
+        <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="yt-link">▶ YouTube</a>
+        <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="tg-link">✈ Telegram</a>
+      </div>
       <p>© 2025 Sheikh Asif Madani. All rights reserved.</p>
       <p class="footer-links">
-        <a href="teachings.html">Teachings</a> &middot;
-        <a href="videos.html">Videos</a> &middot;
-        <a href="research.html">Research</a> &middot;
-        <a href="books.html">Books</a> &middot;
-        <a href="qa.html">Q&amp;A</a> &middot;
-        <a href="contact.html">Contact</a>
+        <a href="teachings.html">Teachings</a> &middot; <a href="videos.html">Videos</a> &middot;
+        <a href="research.html">Research</a> &middot; <a href="books.html">Books</a> &middot;
+        <a href="qa.html">Q&amp;A</a> &middot; <a href="contact.html">Contact</a>
       </p>
     </div>
   </footer>
+
+  <div class="float-social">
+    <a href="https://youtube.com/@darulilm3716" target="_blank" rel="noopener" class="float-btn yt" title="YouTube">▶</a>
+    <a href="https://t.me/+OTs9l7p6_ntjNDE1" target="_blank" rel="noopener" class="float-btn tg" title="Telegram">✈</a>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
