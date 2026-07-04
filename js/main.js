@@ -124,8 +124,8 @@ document.querySelectorAll('.qa-question').forEach(btn => {
 //    visit https://api.telegram.org/bot<TOKEN>/getUpdates after sending a message
 // 5. Replace YOUR_BOT_TOKEN and YOUR_CHAT_ID below
 
-const TG_TOKEN   = 'YOUR_BOT_TOKEN';   // ← paste your bot token here
-const TG_CHAT_ID = 'YOUR_CHAT_ID';     // ← paste your group/channel chat ID here
+const TG_TOKEN   = '8994196600:AAFxPuqsWuvZuVcwqvd6rdbO6EfVw-XDwRE';
+const TG_CHAT_ID = '-1003936101148';
 
 async function sendToTelegram(name, category, email, question) {
   const text =
