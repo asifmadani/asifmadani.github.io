@@ -128,21 +128,29 @@ const TG_TOKEN   = '8994196600:AAFxPuqsWuvZuVcwqvd6rdbO6EfVw-XDwRE';
 const TG_CHAT_ID = '-1003936101148';
 
 async function sendToTelegram(name, category, email, question) {
+  // Plain text only — no parse_mode to avoid Markdown errors from user input
   const text =
-    `🕌 *New Question — Sheikh Asif Madani Website*\n\n` +
-    `👤 *Name:* ${name}\n` +
-    `📂 *Category:* ${category || 'General'}\n` +
-    `📧 *Email:* ${email || 'Not provided'}\n\n` +
-    `❓ *Question:*\n${question}`;
+    `🕌 New Question — Sheikh Asif Madani Website\n` +
+    `─────────────────────────\n` +
+    `👤 Name: ${name}\n` +
+    `📂 Category: ${category || 'General'}\n` +
+    `📧 Email: ${email || 'Not provided'}\n` +
+    `─────────────────────────\n` +
+    `❓ Question:\n${question}`;
 
   try {
     const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: 'Markdown' }),
+      body: JSON.stringify({ chat_id: TG_CHAT_ID, text }),
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error('Telegram error:', err);
+    }
     return res.ok;
-  } catch {
+  } catch (e) {
+    console.error('Telegram fetch error:', e);
     return false;
   }
 }
