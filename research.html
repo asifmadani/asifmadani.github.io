@@ -7,15 +7,22 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Google Translate (hidden — controlled by custom language switcher) -->
   <div id="google_translate_element" style="display:none;"></div>
   <script>
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({ pageLanguage:'en', includedLanguages:'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay:false }, 'google_translate_element');
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'ar,bn,gu,hi,kn,ml,mr,or,pa,ps,sd,ta,te,ur,fa,en',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
     }
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-</head>
-<body>
 
   <nav class="navbar">
     <div class="nav-container">
