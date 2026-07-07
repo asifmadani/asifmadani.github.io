@@ -23,13 +23,18 @@
   --nav-h:        70px;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
 
 body {
   font-family: var(--font-body);
   background: var(--cream);
   color: var(--text-dark);
   line-height: 1.7;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -412,7 +417,7 @@ body { top: 0px !important; }
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 1.5rem;
 }
 
@@ -483,7 +488,7 @@ body { top: 0px !important; }
    ============================================ */
 .topics-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 1.25rem;
 }
 
@@ -508,7 +513,7 @@ body { top: 0px !important; }
    ============================================ */
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 1.5rem;
 }
 
@@ -763,7 +768,6 @@ body { top: 0px !important; }
   margin: 0 auto;
 }
 
-@media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
 
 .contact-info {
   background: var(--white);
@@ -901,15 +905,16 @@ body { top: 0px !important; }
 .footer-social .tg-link { background: #0088cc; }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE — 1024px (tablet landscape)
    ============================================ */
-@media (max-width: 640px) {
-  .nav-social { display: none; }
-  .lang-btn span { display: none; }
-  .lang-btn { padding: 0.4rem 0.6rem; }
-  .lang-dropdown { right: 0; left: auto; width: 210px; }
+@media (max-width: 1024px) {
+  .logo-text { font-size: 0.9rem; }
+  .nav-links a { padding: 0.4rem 0.65rem; font-size: 0.85rem; }
 }
 
+/* ============================================
+   RESPONSIVE — 768px (tablet)
+   ============================================ */
 @media (max-width: 768px) {
   .nav-toggle { display: block; }
 
@@ -924,12 +929,95 @@ body { top: 0px !important; }
     gap: 0.25rem;
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     z-index: 999;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .nav-links.open { display: flex; }
-  .nav-links a { padding: 0.6rem 0.8rem; }
+  .nav-links a { padding: 0.6rem 0.8rem; font-size: 0.9rem; }
 
+  .logo-text { font-size: 0.85rem; }
+
+  /* Nav: hide social icons, shrink lang btn */
+  .nav-social { display: none; }
+  .lang-btn span { display: none; }
+  .lang-btn { padding: 0.4rem 0.6rem; }
+  .lang-dropdown { right: 0; left: auto; width: 210px; }
+
+  /* Layouts */
   .contact-grid { grid-template-columns: 1fr; }
   .yt-banner { flex-direction: column; }
   .btn-yt { margin-left: 0; }
+  .video-grid { grid-template-columns: 1fr; }
+  .pub-card { flex-wrap: wrap; }
+
+  /* Spacing */
+  .sections-grid { padding: 3rem 1rem; }
+  .page-content { padding: 3rem 1rem; }
+  .verse-banner, .hadith-banner { padding: 2.5rem 1rem; }
+  .page-hero { padding: 3rem 1rem 2.5rem; }
+}
+
+/* ============================================
+   RESPONSIVE — 480px (mobile)
+   ============================================ */
+@media (max-width: 480px) {
+  /* Navbar — prevent logo overflow on small screens */
+  .nav-logo {
+    min-width: 0;
+    overflow: hidden;
+    flex-shrink: 1;
+  }
+  .logo-text {
+    font-size: 0.78rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 130px;
+  }
+  .arabic-logo { font-size: 1.25rem; }
+
+  /* Hero */
+  .hero { min-height: 75vh; }
+  .hero-content { padding: 1.5rem 1rem; }
+  .hero-buttons { gap: 0.6rem; }
+  .btn { padding: 0.65rem 1.3rem; font-size: 0.88rem; }
+
+  /* Grid layouts — force single column */
+  .cards-grid   { grid-template-columns: 1fr; }
+  .topics-list  { grid-template-columns: 1fr; }
+  .video-grid   { grid-template-columns: 1fr; }
+
+  /* Spacing */
+  .sections-grid { padding: 2rem 1rem; }
+  .page-content  { padding: 2rem 1rem; }
+  .page-hero     { padding: 2.5rem 1rem 2rem; }
+  .verse-banner, .hadith-banner { padding: 2rem 1rem; }
+
+  /* Cards */
+  .card { padding: 1.5rem 1.25rem; }
+
+  /* Pub cards — stack icon above text */
+  .pub-card { flex-direction: column; gap: 0.75rem; padding: 1.25rem; }
+  .pub-icon { font-size: 1.6rem; }
+
+  /* Q&A */
+  .qa-question { padding: 0.9rem 1rem; }
+  .qa-answer   { padding: 0.9rem 1rem 1.1rem; }
+  .qa-form     { padding: 1.25rem 1rem; }
+  .qa-intro    { padding: 1.25rem 1rem; }
+
+  /* Contact */
+  .contact-info  { padding: 1.25rem 1rem; }
+  .contact-form  { padding: 1.25rem 1rem; }
+
+  /* YT banner */
+  .yt-banner { padding: 1.5rem; gap: 1rem; }
+
+  /* Floating buttons */
+  .float-btn    { width: 42px; height: 42px; font-size: 1.1rem; }
+  .float-social { right: 0.75rem; bottom: 1rem; }
+
+  /* Lang dropdown */
+  .lang-dropdown { width: 200px; }
 }
