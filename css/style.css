@@ -937,6 +937,7 @@ body { top: 0px !important; }
   .nav-links a { padding: 0.6rem 0.8rem; font-size: 0.9rem; }
 
   .logo-text { font-size: 0.85rem; }
+  .arabic-logo { font-size: 1.2rem; }
 
   /* Nav: hide social icons, shrink lang btn */
   .nav-social { display: none; }
@@ -975,7 +976,12 @@ body { top: 0px !important; }
     white-space: nowrap;
     max-width: 130px;
   }
-  .arabic-logo { font-size: 1.25rem; }
+  .arabic-logo {
+    font-size: 1rem;
+    overflow: hidden;
+    flex-shrink: 1;
+    max-width: 120px;
+  }
 
   /* Hero */
   .hero { min-height: 75vh; }
