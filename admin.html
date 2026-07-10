@@ -23,22 +23,25 @@
     }
     header h1 { font-size: 1.15rem; margin: 0; }
     header button { background: var(--gold); border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem; }
     .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
-    input[type=password], input[type=text] {
+    input[type=password], input[type=text], input[type=file], select {
       width: 100%; padding: 0.7rem 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 0.8rem;
+      font-family: inherit; background: #fff;
     }
     button.primary { background: var(--green-mid); color: #fff; border: none; padding: 0.7rem 1.3rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
     button.danger { background: #c0392b; color: #fff; border: none; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; }
     button.ghost { background: none; border: 1px solid #ccc; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; }
-    .pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1rem; }
-    .pages button { padding: 1.2rem; font-size: 1rem; border-radius: var(--radius); border: 1px solid #ddd; background: var(--white); cursor: pointer; font-weight: 600; box-shadow: var(--shadow); }
+    .pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0.8rem; }
+    .pages button { padding: 1rem 0.5rem; font-size: 0.92rem; border-radius: var(--radius); border: 1px solid #ddd; background: var(--white); cursor: pointer; font-weight: 600; box-shadow: var(--shadow); }
     .pages button.active { background: var(--green-mid); color: #fff; border-color: var(--green-mid); }
     .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 0.8rem 0; gap: 0.5rem; }
     .item-row:last-child { border-bottom: none; }
-    .item-title { font-weight: 600; flex: 1; }
-    .item-actions { display: flex; gap: 0.5rem; }
-    #editor { background: #fff; min-height: 260px; }
+    .item-title { flex: 1; }
+    .item-title b { display: block; }
+    .item-title small { color: var(--text-light); }
+    .item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+    #editor { background: #fff; min-height: 220px; }
     .toolbar-row { display: flex; gap: 0.6rem; margin-top: 1rem; }
     .msg { font-size: 0.9rem; margin-top: 0.6rem; }
     .msg.err { color: #c0392b; }
@@ -82,10 +85,38 @@
 
     <!-- Editor -->
     <div class="card hidden" id="editorCard">
-      <label for="titleInput">Title</label>
+      <label id="titleLabel">Title</label>
       <input type="text" id="titleInput" placeholder="Title" />
-      <label>Content</label>
-      <div id="editor"></div>
+
+      <div id="nameField" class="hidden">
+        <label>Sawal poochne wale ka naam</label>
+        <input type="text" id="nameInput" placeholder="Anonymous" />
+      </div>
+
+      <div id="ytField" class="hidden">
+        <label>YouTube Link ya Video ID</label>
+        <input type="text" id="ytInput" placeholder="https://youtube.com/watch?v=..." />
+      </div>
+
+      <div id="langField" class="hidden">
+        <label>Language</label>
+        <select id="langInput">
+          <option value="Urdu">Urdu</option>
+          <option value="English">English</option>
+        </select>
+      </div>
+
+      <div id="pdfField" class="hidden">
+        <label id="pdfLabel">PDF File</label>
+        <input type="file" id="pdfInput" accept="application/pdf" />
+        <div class="msg" id="pdfCurrent"></div>
+      </div>
+
+      <div id="contentField">
+        <label id="contentLabel">Content</label>
+        <div id="editor"></div>
+      </div>
+
       <div class="toolbar-row">
         <button class="primary" id="saveBtn">Save</button>
         <button class="ghost" id="cancelBtn">Cancel</button>
@@ -100,8 +131,10 @@
     const API = "https://islamqa-bot.onrender.com";
     let token = sessionStorage.getItem("admin_token") || "";
     let currentPage = null;
+    let currentKind = null;
     let currentItems = [];
     let editingIdx = null; // null = new item
+    let existingPdfFilename = "";
 
     const $ = (id) => document.getElementById(id);
 
@@ -118,6 +151,15 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.detail || "Request failed");
       return data;
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(",")[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
     }
 
     function showLogin() {
@@ -140,13 +182,14 @@
       data.pages.forEach(p => {
         const b = document.createElement("button");
         b.textContent = p.label;
-        b.onclick = () => loadPage(p.key, p.label);
+        b.onclick = () => loadPage(p.key, p.label, p.kind);
         wrap.appendChild(b);
       });
     }
 
-    async function loadPage(key, label) {
+    async function loadPage(key, label, kind) {
       currentPage = key;
+      currentKind = kind;
       $("listCard").classList.remove("hidden");
       $("editorCard").classList.add("hidden");
       $("listTitle").textContent = label;
@@ -162,6 +205,14 @@
       }
     }
 
+    function itemSubtitle(item) {
+      if (currentKind === "qa") return item.name ? `Poocha: ${item.name}` : "";
+      if (currentKind === "video") return item.youtube_id ? `YouTube: ${item.youtube_id}` : "No YouTube ID";
+      if (currentKind === "research") return item.pdf_filename ? `PDF: ${item.pdf_filename}` : "No PDF";
+      if (currentKind === "book") return `${item.language || "Urdu"} · ${item.pdf_filename ? "PDF: " + item.pdf_filename : "No PDF"}`;
+      return "";
+    }
+
     function renderItems() {
       const wrap = $("itemsWrap");
       wrap.innerHTML = "";
@@ -170,10 +221,11 @@
         return;
       }
       currentItems.forEach(item => {
+        const sub = itemSubtitle(item);
         const row = document.createElement("div");
         row.className = "item-row";
         row.innerHTML = `
-          <span class="item-title">${item.title}</span>
+          <span class="item-title"><b>${item.title}</b>${sub ? `<small>${sub}</small>` : ""}</span>
           <span class="item-actions">
             <button class="ghost" data-act="edit">Edit</button>
             <button class="danger" data-act="del">Delete</button>
@@ -204,19 +256,44 @@
       }
     }
 
+    function setFieldVisibility() {
+      $("nameField").classList.toggle("hidden", currentKind !== "qa");
+      $("ytField").classList.toggle("hidden", currentKind !== "video");
+      $("langField").classList.toggle("hidden", currentKind !== "book");
+      $("pdfField").classList.toggle("hidden", !(currentKind === "research" || currentKind === "book"));
+      $("titleLabel").textContent = currentKind === "qa" ? "Sawal (Question)" : "Title";
+      $("contentLabel").textContent = currentKind === "qa" ? "Jawab (Answer)" : "Content";
+      $("pdfLabel").textContent = currentKind === "book" ? "PDF File (zaroori)" : "PDF File (optional)";
+    }
+
     function openEditor(idx) {
       ensureQuill();
       editingIdx = idx;
+      existingPdfFilename = "";
+      setFieldVisibility();
       $("listCard").classList.add("hidden");
       $("editorCard").classList.remove("hidden");
       $("editorMsg").textContent = "";
+      $("pdfInput").value = "";
+      $("pdfCurrent").textContent = "";
+
       if (idx === null) {
         $("titleInput").value = "";
+        $("nameInput").value = "";
+        $("ytInput").value = "";
+        $("langInput").value = "Urdu";
         quill.root.innerHTML = "";
       } else {
         const item = currentItems.find(i => i.idx === idx);
         $("titleInput").value = item.title;
         quill.root.innerHTML = item.content;
+        $("nameInput").value = item.name || "";
+        $("ytInput").value = item.youtube_id || "";
+        $("langInput").value = item.language || "Urdu";
+        if (item.pdf_filename) {
+          existingPdfFilename = item.pdf_filename;
+          $("pdfCurrent").textContent = `Current PDF: ${item.pdf_filename} (naya file select karo replace karne ke liye)`;
+        }
       }
     }
 
@@ -224,21 +301,38 @@
       const title = $("titleInput").value.trim();
       const content = quill.root.innerHTML;
       if (!title) {
-        $("editorMsg").textContent = "Title zaroori hai.";
+        $("editorMsg").textContent = currentKind === "qa" ? "Sawal likhna zaroori hai." : "Title zaroori hai.";
         $("editorMsg").className = "msg err";
         return;
       }
+
+      const body = { title, content };
+      if (currentKind === "qa") body.name = $("nameInput").value.trim() || "Anonymous";
+      if (currentKind === "video") body.youtube_url = $("ytInput").value.trim();
+      if (currentKind === "book") body.language = $("langInput").value;
+
+      if (currentKind === "research" || currentKind === "book") {
+        const file = $("pdfInput").files[0];
+        if (file) {
+          body.pdf_base64 = await fileToBase64(file);
+        } else if (currentKind === "book" && editingIdx === null && !existingPdfFilename) {
+          $("editorMsg").textContent = "Books ke liye PDF file zaroori hai.";
+          $("editorMsg").className = "msg err";
+          return;
+        }
+      }
+
       $("editorMsg").textContent = "Saving...";
       $("editorMsg").className = "msg";
       try {
         if (editingIdx === null) {
-          await api(`/admin/content/${currentPage}`, { method: "POST", body: JSON.stringify({ title, content }) });
+          await api(`/admin/content/${currentPage}`, { method: "POST", body: JSON.stringify(body) });
         } else {
-          await api(`/admin/content/${currentPage}/${editingIdx}`, { method: "PUT", body: JSON.stringify({ title, content }) });
+          await api(`/admin/content/${currentPage}/${editingIdx}`, { method: "PUT", body: JSON.stringify(body) });
         }
         $("editorCard").classList.add("hidden");
         $("listCard").classList.remove("hidden");
-        await loadPage(currentPage, $("listTitle").textContent);
+        await loadPage(currentPage, $("listTitle").textContent, currentKind);
       } catch (e) {
         $("editorMsg").textContent = e.message;
         $("editorMsg").className = "msg err";
@@ -249,7 +343,7 @@
       if (!confirm(`Delete karein "${title}"? Yeh undo nahi hoga.`)) return;
       try {
         await api(`/admin/content/${currentPage}/${idx}`, { method: "DELETE" });
-        await loadPage(currentPage, $("listTitle").textContent);
+        await loadPage(currentPage, $("listTitle").textContent, currentKind);
       } catch (e) {
         $("listMsg").textContent = e.message;
         $("listMsg").className = "msg err";
