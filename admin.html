@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin — Darul Ilm</title>
+  <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" />
+  <style>
+    :root {
+      --green-dark: #1a3d2b; --green-mid: #2d6a4f; --gold: #c9a84c;
+      --cream: #fdfaf4; --text-dark: #1c1c1c; --text-light: #6b6b6b;
+      --white: #ffffff; --shadow: 0 4px 20px rgba(0,0,0,0.10); --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Inter', sans-serif; background: var(--cream);
+      color: var(--text-dark); min-height: 100vh;
+    }
+    header {
+      background: var(--green-dark); color: var(--white);
+      padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+    }
+    header h1 { font-size: 1.15rem; margin: 0; }
+    header button { background: var(--gold); border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
+    input[type=password], input[type=text] {
+      width: 100%; padding: 0.7rem 0.9rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 0.8rem;
+    }
+    button.primary { background: var(--green-mid); color: #fff; border: none; padding: 0.7rem 1.3rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    button.danger { background: #c0392b; color: #fff; border: none; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; }
+    button.ghost { background: none; border: 1px solid #ccc; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; }
+    .pages { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1rem; }
+    .pages button { padding: 1.2rem; font-size: 1rem; border-radius: var(--radius); border: 1px solid #ddd; background: var(--white); cursor: pointer; font-weight: 600; box-shadow: var(--shadow); }
+    .pages button.active { background: var(--green-mid); color: #fff; border-color: var(--green-mid); }
+    .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 0.8rem 0; gap: 0.5rem; }
+    .item-row:last-child { border-bottom: none; }
+    .item-title { font-weight: 600; flex: 1; }
+    .item-actions { display: flex; gap: 0.5rem; }
+    #editor { background: #fff; min-height: 260px; }
+    .toolbar-row { display: flex; gap: 0.6rem; margin-top: 1rem; }
+    .msg { font-size: 0.9rem; margin-top: 0.6rem; }
+    .msg.err { color: #c0392b; }
+    .msg.ok { color: var(--green-mid); }
+    .hidden { display: none !important; }
+    label { font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🕌 Darul Ilm — Admin Panel</h1>
+    <button id="logoutBtn" class="hidden">Logout</button>
+  </header>
+
+  <div class="wrap">
+
+    <!-- Login -->
+    <div class="card" id="loginCard">
+      <label for="pw">Admin Password</label>
+      <input type="password" id="pw" placeholder="Password" />
+      <button class="primary" id="loginBtn">Login</button>
+      <div class="msg err" id="loginMsg"></div>
+    </div>
+
+    <!-- Page selector -->
+    <div class="card hidden" id="pagesCard">
+      <label>Kaunsa page manage karna hai?</label>
+      <div class="pages" id="pagesList"></div>
+    </div>
+
+    <!-- Item list -->
+    <div class="card hidden" id="listCard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;">
+        <strong id="listTitle"></strong>
+        <button class="primary" id="addNewBtn">+ Naya Add Karo</button>
+      </div>
+      <div id="itemsWrap"></div>
+      <div class="msg" id="listMsg"></div>
+    </div>
+
+    <!-- Editor -->
+    <div class="card hidden" id="editorCard">
+      <label for="titleInput">Title</label>
+      <input type="text" id="titleInput" placeholder="Title" />
+      <label>Content</label>
+      <div id="editor"></div>
+      <div class="toolbar-row">
+        <button class="primary" id="saveBtn">Save</button>
+        <button class="ghost" id="cancelBtn">Cancel</button>
+      </div>
+      <div class="msg" id="editorMsg"></div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+    const API = "https://islamqa-bot.onrender.com";
+    let token = sessionStorage.getItem("admin_token") || "";
+    let currentPage = null;
+    let currentItems = [];
+    let editingIdx = null; // null = new item
+
+    const $ = (id) => document.getElementById(id);
+
+    async function api(path, opts = {}) {
+      const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
+      if (token) headers["Authorization"] = "Bearer " + token;
+      const res = await fetch(API + path, Object.assign({}, opts, { headers }));
+      if (res.status === 401) {
+        sessionStorage.removeItem("admin_token");
+        token = "";
+        showLogin();
+        throw new Error("Session expired, please login again");
+      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || "Request failed");
+      return data;
+    }
+
+    function showLogin() {
+      $("loginCard").classList.remove("hidden");
+      $("pagesCard").classList.add("hidden");
+      $("listCard").classList.add("hidden");
+      $("editorCard").classList.add("hidden");
+      $("logoutBtn").classList.add("hidden");
+    }
+
+    async function showPages() {
+      $("loginCard").classList.add("hidden");
+      $("pagesCard").classList.remove("hidden");
+      $("listCard").classList.add("hidden");
+      $("editorCard").classList.add("hidden");
+      $("logoutBtn").classList.remove("hidden");
+      const data = await api("/admin/pages");
+      const wrap = $("pagesList");
+      wrap.innerHTML = "";
+      data.pages.forEach(p => {
+        const b = document.createElement("button");
+        b.textContent = p.label;
+        b.onclick = () => loadPage(p.key, p.label);
+        wrap.appendChild(b);
+      });
+    }
+
+    async function loadPage(key, label) {
+      currentPage = key;
+      $("listCard").classList.remove("hidden");
+      $("editorCard").classList.add("hidden");
+      $("listTitle").textContent = label;
+      $("listMsg").textContent = "Loading...";
+      try {
+        const data = await api(`/admin/content/${key}`);
+        currentItems = data.items;
+        renderItems();
+        $("listMsg").textContent = "";
+      } catch (e) {
+        $("listMsg").textContent = e.message;
+        $("listMsg").className = "msg err";
+      }
+    }
+
+    function renderItems() {
+      const wrap = $("itemsWrap");
+      wrap.innerHTML = "";
+      if (!currentItems.length) {
+        wrap.innerHTML = '<p style="color:#999">Koi item nahi hai abhi.</p>';
+        return;
+      }
+      currentItems.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "item-row";
+        row.innerHTML = `
+          <span class="item-title">${item.title}</span>
+          <span class="item-actions">
+            <button class="ghost" data-act="edit">Edit</button>
+            <button class="danger" data-act="del">Delete</button>
+          </span>`;
+        row.querySelector('[data-act=edit]').onclick = () => openEditor(item.idx);
+        row.querySelector('[data-act=del]').onclick = () => deleteItem(item.idx, item.title);
+        wrap.appendChild(row);
+      });
+    }
+
+    let quill;
+    function ensureQuill() {
+      if (!quill) {
+        quill = new Quill('#editor', {
+          theme: 'snow',
+          modules: {
+            toolbar: [
+              [{ header: [1, 2, 3, false] }],
+              ['bold', 'italic', 'underline'],
+              [{ color: [] }, { background: [] }],
+              [{ align: [] }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              ['blockquote', 'link'],
+              ['clean'],
+            ],
+          },
+        });
+      }
+    }
+
+    function openEditor(idx) {
+      ensureQuill();
+      editingIdx = idx;
+      $("listCard").classList.add("hidden");
+      $("editorCard").classList.remove("hidden");
+      $("editorMsg").textContent = "";
+      if (idx === null) {
+        $("titleInput").value = "";
+        quill.root.innerHTML = "";
+      } else {
+        const item = currentItems.find(i => i.idx === idx);
+        $("titleInput").value = item.title;
+        quill.root.innerHTML = item.content;
+      }
+    }
+
+    async function saveItem() {
+      const title = $("titleInput").value.trim();
+      const content = quill.root.innerHTML;
+      if (!title) {
+        $("editorMsg").textContent = "Title zaroori hai.";
+        $("editorMsg").className = "msg err";
+        return;
+      }
+      $("editorMsg").textContent = "Saving...";
+      $("editorMsg").className = "msg";
+      try {
+        if (editingIdx === null) {
+          await api(`/admin/content/${currentPage}`, { method: "POST", body: JSON.stringify({ title, content }) });
+        } else {
+          await api(`/admin/content/${currentPage}/${editingIdx}`, { method: "PUT", body: JSON.stringify({ title, content }) });
+        }
+        $("editorCard").classList.add("hidden");
+        $("listCard").classList.remove("hidden");
+        await loadPage(currentPage, $("listTitle").textContent);
+      } catch (e) {
+        $("editorMsg").textContent = e.message;
+        $("editorMsg").className = "msg err";
+      }
+    }
+
+    async function deleteItem(idx, title) {
+      if (!confirm(`Delete karein "${title}"? Yeh undo nahi hoga.`)) return;
+      try {
+        await api(`/admin/content/${currentPage}/${idx}`, { method: "DELETE" });
+        await loadPage(currentPage, $("listTitle").textContent);
+      } catch (e) {
+        $("listMsg").textContent = e.message;
+        $("listMsg").className = "msg err";
+      }
+    }
+
+    $("loginBtn").onclick = async () => {
+      const pw = $("pw").value;
+      $("loginMsg").textContent = "";
+      try {
+        const res = await fetch(API + "/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: pw }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Login failed");
+        token = data.token;
+        sessionStorage.setItem("admin_token", token);
+        await showPages();
+      } catch (e) {
+        $("loginMsg").textContent = e.message;
+      }
+    };
+
+    $("logoutBtn").onclick = () => {
+      sessionStorage.removeItem("admin_token");
+      token = "";
+      showLogin();
+    };
+
+    $("addNewBtn").onclick = () => openEditor(null);
+    $("saveBtn").onclick = saveItem;
+    $("cancelBtn").onclick = () => {
+      $("editorCard").classList.add("hidden");
+      $("listCard").classList.remove("hidden");
+    };
+
+    // Auto-resume session if token already stored
+    if (token) {
+      showPages().catch(() => showLogin());
+    } else {
+      showLogin();
+    }
+  </script>
+</body>
+</html>

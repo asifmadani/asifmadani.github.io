@@ -509,6 +509,33 @@ body { top: 0px !important; }
 .topic-card p { color: var(--text-light); font-size: 0.88rem; }
 
 /* ============================================
+   RICH CONTENT (admin panel / Quill output)
+   ============================================ */
+.content-body { color: var(--text-light); font-size: 0.95rem; line-height: 1.9; }
+.content-body p { margin: 0 0 0.8rem; }
+.content-body h1, .content-body h2, .content-body h3 { color: var(--green-dark); margin: 0.9rem 0 0.5rem; }
+.content-body ul, .content-body ol { margin: 0 0 0.8rem 1.4rem; }
+.content-body blockquote {
+  border-left: 4px solid var(--green-mid);
+  margin: 0.8rem 0;
+  padding: 0.3rem 1rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+.content-body a { color: var(--green-mid); }
+.content-body strong { color: var(--green-dark); }
+.content-body .ql-align-center { text-align: center; }
+.content-body .ql-align-right { text-align: right; }
+.content-body .ql-align-justify { text-align: justify; }
+.content-body .ql-direction-rtl { direction: rtl; text-align: right; }
+.content-body .ql-indent-1 { padding-left: 1.5rem; }
+.content-body .ql-indent-2 { padding-left: 3rem; }
+.content-body .ql-size-small { font-size: 0.78rem; }
+.content-body .ql-size-large { font-size: 1.2rem; }
+.content-body .ql-size-huge { font-size: 1.5rem; }
+.content-body .ql-font-serif { font-family: 'Amiri', serif; }
+
+/* ============================================
    VIDEO GRID
    ============================================ */
 .video-grid {
