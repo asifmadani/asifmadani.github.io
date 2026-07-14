@@ -42,6 +42,9 @@
     .item-title small { color: var(--text-light); }
     .item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
     #editor { background: #fff; min-height: 220px; }
+    /* Sheikh types mostly Urdu/Arabic — auto-detect direction per line instead
+       of forcing LTR, so text flows right-to-left without a manual toggle. */
+    .ql-editor, input[type=text] { unicode-bidi: plain-text; }
     .toolbar-row { display: flex; gap: 0.6rem; margin-top: 1rem; }
     .msg { font-size: 0.9rem; margin-top: 0.6rem; }
     .msg.err { color: #c0392b; }

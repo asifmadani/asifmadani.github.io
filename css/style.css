@@ -511,6 +511,23 @@ body { top: 0px !important; }
 /* ============================================
    RICH CONTENT (admin panel / Quill output)
    ============================================ */
+/* Content is mostly Urdu/Arabic — auto-detect direction per paragraph instead
+   of forcing LTR, so Sheikh doesn't have to manually toggle RTL every time. */
+.content-body,
+.content-body p,
+.content-body li,
+.content-body h1,
+.content-body h2,
+.content-body h3,
+.content-body blockquote,
+.topic-card h3,
+.topic-card p,
+.pub-card h3,
+.video-card h3,
+.qa-question h3,
+.qa-answer {
+  unicode-bidi: plain-text;
+}
 .content-body { color: var(--text-light); font-size: 0.95rem; line-height: 1.9; }
 .content-body p { margin: 0 0 0.8rem; }
 .content-body h1, .content-body h2, .content-body h3 { color: var(--green-dark); margin: 0.9rem 0 0.5rem; }
