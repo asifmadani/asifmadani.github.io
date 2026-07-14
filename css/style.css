@@ -783,18 +783,7 @@ body { top: 0px !important; }
   flex: 1;
 }
 
-.qa-toggle {
-  color: var(--green-mid);
-  font-size: 1.3rem;
-  font-weight: 700;
-  flex-shrink: 0;
-  transition: transform 0.3s;
-}
-
-.qa-item.open .qa-toggle { transform: rotate(45deg); }
-
 .qa-answer {
-  display: none;
   padding: 1rem 1.5rem 1.3rem;
   background: var(--cream);
   border-top: 1px solid var(--cream-dark);
@@ -802,8 +791,6 @@ body { top: 0px !important; }
   color: var(--text-mid);
   line-height: 1.75;
 }
-
-.qa-item.open .qa-answer { display: block; }
 
 /* ============================================
    CONTACT PAGE

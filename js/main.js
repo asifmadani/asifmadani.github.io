@@ -21,7 +21,7 @@ function applyAutoDirection(root = document) {
   root.querySelectorAll(
     '.content-body p, .content-body li, .content-body ul, .content-body ol, ' +
     '.content-body h1, .content-body h2, .content-body h3, .content-body blockquote, ' +
-    '.topic-card h3, .pub-card h3, .video-card h3, .qa-question h3'
+    '.topic-card h3, .pub-card h3, .video-card h3, .qa-question h3, .page-hero h1'
   ).forEach(el => {
     const dir = detectDir(el.textContent);
     if (dir) {
@@ -33,34 +33,10 @@ function applyAutoDirection(root = document) {
 
 applyAutoDirection();
 
-// ============================================================
-// FAQPage STRUCTURED DATA (qa.html)
-// ============================================================
-// Published Q&A is exactly what Google's FAQ rich-result format wants —
-// generating it from the qa-item elements already in the DOM means every
-// approved answer automatically becomes eligible for FAQ snippets in
-// search, with zero bot/admin changes needed.
-const qaItems = document.querySelectorAll('.qa-item');
-if (qaItems.length) {
-  const faqData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": Array.from(qaItems).map(item => ({
-      "@type": "Question",
-      "name": item.querySelector('.qa-question h3')?.textContent.trim() || "",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.querySelector('.qa-answer .content-body')?.textContent.trim() || "",
-      },
-    })).filter(q => q.name && q.acceptedAnswer.text),
-  };
-  if (faqData.mainEntity.length) {
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(faqData);
-    document.head.appendChild(script);
-  }
-}
+// Note: qa.html listing now shows excerpts only (full answers moved to
+// individual qa/<id>.html detail pages, each with its own QAPage JSON-LD
+// generated server-side by the bot) — a page-level FAQPage schema built
+// from excerpts here would just be redundant/lower-quality duplicate data.
 
 // ============================================================
 // MOBILE NAV TOGGLE
@@ -170,12 +146,6 @@ function initLanguage() {
 
 window.addEventListener('DOMContentLoaded', initLanguage);
 
-// ============================================================
-// Q&A ACCORDION
-// ============================================================
-document.querySelectorAll('.qa-question').forEach(btn => {
-  btn.addEventListener('click', () => btn.closest('.qa-item').classList.toggle('open'));
-});
 
 // ============================================================
 // Q&A FORM → TELEGRAM BOT
