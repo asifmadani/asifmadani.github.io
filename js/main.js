@@ -24,11 +24,43 @@ function applyAutoDirection(root = document) {
     '.topic-card h3, .pub-card h3, .video-card h3, .qa-question h3'
   ).forEach(el => {
     const dir = detectDir(el.textContent);
-    if (dir) el.setAttribute('dir', dir);
+    if (dir) {
+      el.setAttribute('dir', dir);
+      el.setAttribute('lang', dir === 'rtl' ? 'ur' : 'en');
+    }
   });
 }
 
 applyAutoDirection();
+
+// ============================================================
+// FAQPage STRUCTURED DATA (qa.html)
+// ============================================================
+// Published Q&A is exactly what Google's FAQ rich-result format wants —
+// generating it from the qa-item elements already in the DOM means every
+// approved answer automatically becomes eligible for FAQ snippets in
+// search, with zero bot/admin changes needed.
+const qaItems = document.querySelectorAll('.qa-item');
+if (qaItems.length) {
+  const faqData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": Array.from(qaItems).map(item => ({
+      "@type": "Question",
+      "name": item.querySelector('.qa-question h3')?.textContent.trim() || "",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.querySelector('.qa-answer .content-body')?.textContent.trim() || "",
+      },
+    })).filter(q => q.name && q.acceptedAnswer.text),
+  };
+  if (faqData.mainEntity.length) {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(faqData);
+    document.head.appendChild(script);
+  }
+}
 
 // ============================================================
 // MOBILE NAV TOGGLE
