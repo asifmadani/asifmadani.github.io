@@ -539,6 +539,10 @@ body { top: 0px !important; }
   color: var(--text-light);
   font-style: italic;
 }
+/* dir="rtl" is set per-element by js/main.js based on detected script */
+[dir="rtl"] { text-align: right; }
+.content-body ul[dir="rtl"], .content-body ol[dir="rtl"] { margin: 0 1.4rem 0.8rem 0; }
+.content-body blockquote[dir="rtl"] { border-left: none; border-right: 4px solid var(--green-mid); }
 .content-body a { color: var(--green-mid); }
 .content-body strong { color: var(--green-dark); }
 .content-body .ql-align-center { text-align: center; }

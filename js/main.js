@@ -1,4 +1,36 @@
 // ============================================================
+// AUTO RTL/LTR DIRECTION (Urdu/Arabic content)
+// ============================================================
+// CSS alone (unicode-bidi) reorders characters but doesn't flip text-align,
+// so RTL text still hugs the left edge. Setting the actual dir attribute
+// per element fixes both, and works for content already published by the
+// bot before this existed (no bot/HTML changes needed — detection runs on
+// whatever text is already in the DOM).
+const RTL_CHAR = /[\u0591-\u07FF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
+const LTR_CHAR = /[A-Za-z]/;
+
+function detectDir(text) {
+  for (const ch of text) {
+    if (RTL_CHAR.test(ch)) return 'rtl';
+    if (LTR_CHAR.test(ch)) return 'ltr';
+  }
+  return null; // no strong character found (digits/emoji/punctuation only)
+}
+
+function applyAutoDirection(root = document) {
+  root.querySelectorAll(
+    '.content-body p, .content-body li, .content-body ul, .content-body ol, ' +
+    '.content-body h1, .content-body h2, .content-body h3, .content-body blockquote, ' +
+    '.topic-card h3, .pub-card h3, .video-card h3, .qa-question h3'
+  ).forEach(el => {
+    const dir = detectDir(el.textContent);
+    if (dir) el.setAttribute('dir', dir);
+  });
+}
+
+applyAutoDirection();
+
+// ============================================================
 // MOBILE NAV TOGGLE
 // ============================================================
 const navToggle = document.getElementById('navToggle');

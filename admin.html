@@ -141,6 +141,28 @@
 
     const $ = (id) => document.getElementById(id);
 
+    // Auto RTL/LTR: detect script per line so Sheikh doesn't need to toggle
+    // direction manually while typing Urdu/Arabic.
+    const RTL_CHAR = /[\u0591-\u07FF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
+    const LTR_CHAR = /[A-Za-z]/;
+    function detectDir(text) {
+      for (const ch of text) {
+        if (RTL_CHAR.test(ch)) return 'rtl';
+        if (LTR_CHAR.test(ch)) return 'ltr';
+      }
+      return null;
+    }
+    function applyEditorDirection() {
+      quill.root.querySelectorAll('p, li, h1, h2, h3, blockquote').forEach(el => {
+        const dir = detectDir(el.textContent);
+        if (dir) el.setAttribute('dir', dir); else el.removeAttribute('dir');
+      });
+    }
+    function applyInputDirection(el) {
+      const dir = detectDir(el.value);
+      if (dir) el.setAttribute('dir', dir); else el.removeAttribute('dir');
+    }
+
     async function api(path, opts = {}) {
       const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
       if (token) headers["Authorization"] = "Bearer " + token;
@@ -256,6 +278,7 @@
             ],
           },
         });
+        quill.on('text-change', applyEditorDirection);
       }
     }
 
@@ -298,6 +321,8 @@
           $("pdfCurrent").textContent = `Current PDF: ${item.pdf_filename} (naya file select karo replace karne ke liye)`;
         }
       }
+      applyInputDirection($("titleInput"));
+      applyEditorDirection();
     }
 
     async function saveItem() {
@@ -380,6 +405,7 @@
 
     $("addNewBtn").onclick = () => openEditor(null);
     $("saveBtn").onclick = saveItem;
+    $("titleInput").addEventListener('input', () => applyInputDirection($("titleInput")));
     $("cancelBtn").onclick = () => {
       $("editorCard").classList.add("hidden");
       $("listCard").classList.remove("hidden");
