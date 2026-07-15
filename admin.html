@@ -43,9 +43,12 @@
     .item-title small { color: var(--text-light); }
     .item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
     #editor { background: #fff; min-height: 220px; }
-    /* Sheikh types mostly Urdu/Arabic — auto-detect direction per line instead
-       of forcing LTR, so text flows right-to-left without a manual toggle. */
-    .ql-editor, input[type=text] { unicode-bidi: plain-text; }
+    /* Sheikh types mostly Urdu/Arabic — applyEditorDirection() sets Quill's
+       own 'direction'/'align' formats per line as he types, which render as
+       these classes. admin.html doesn't load the site's style.css, so this
+       needs its own copy of the rule (kept in sync with style.css). */
+    .ql-editor .ql-direction-rtl { direction: rtl; text-align: right; }
+    input[type=text] { unicode-bidi: plain-text; }
     .toolbar-row { display: flex; gap: 0.6rem; margin-top: 1rem; }
     .msg { font-size: 0.9rem; margin-top: 0.6rem; }
     .msg.err { color: #c0392b; }
@@ -154,9 +157,18 @@
       return null;
     }
     function applyEditorDirection() {
-      quill.root.querySelectorAll('p, li, h1, h2, h3, blockquote').forEach(el => {
-        const dir = detectDir(el.textContent);
-        if (dir) el.setAttribute('dir', dir); else el.removeAttribute('dir');
+      // Quill owns its DOM via a Delta model — setting a raw `dir` attribute
+      // gets silently wiped on the next re-render. Use Quill's own
+      // 'direction'/'align' formats instead (same ones the align toolbar
+      // button sets), which persist and serialize into saved HTML as
+      // class="ql-direction-rtl"/"ql-align-right" — already styled in
+      // style.css so it renders correctly on the public site too.
+      quill.getLines(0, quill.getLength()).forEach(line => {
+        if (!line.domNode) return;
+        const dir = detectDir(line.domNode.textContent || '');
+        const index = quill.getIndex(line);
+        quill.formatLine(index, 1, 'direction', dir === 'rtl' ? 'rtl' : false, 'silent');
+        quill.formatLine(index, 1, 'align', dir === 'rtl' ? 'right' : false, 'silent');
       });
     }
     function applyInputDirection(el) {

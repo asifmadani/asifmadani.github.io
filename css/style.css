@@ -528,6 +528,11 @@ body { top: 0px !important; }
 .qa-answer {
   unicode-bidi: plain-text;
 }
+/* Detail pages (article .content-body) put content directly inside the
+   1100px page container — without a narrower reading column, short RTL
+   lines right-align individually and leave a huge ragged gap on wide
+   screens. Constrain + center it like a normal document column. */
+article .content-body { max-width: 720px; margin: 0 auto; }
 .content-body { color: var(--text-light); font-size: 0.95rem; line-height: 1.9; }
 .content-body p { margin: 0 0 0.8rem; }
 .content-body h1, .content-body h2, .content-body h3 { color: var(--green-dark); margin: 0.9rem 0 0.5rem; }
@@ -541,6 +546,7 @@ body { top: 0px !important; }
 }
 /* dir="rtl" is set per-element by js/main.js based on detected script */
 [dir="rtl"] { text-align: right; }
+.page-hero h1[dir="rtl"] { text-align: center; }
 .content-body ul[dir="rtl"], .content-body ol[dir="rtl"] { margin: 0 1.4rem 0.8rem 0; }
 .content-body blockquote[dir="rtl"] { border-left: none; border-right: 4px solid var(--green-mid); }
 .content-body a { color: var(--green-mid); }
