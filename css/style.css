@@ -535,6 +535,11 @@ body { top: 0px !important; }
 article .content-body { max-width: 720px; margin: 0 auto; }
 .content-body { color: var(--text-light); font-size: 0.95rem; line-height: 1.9; }
 .content-body p { margin: 0 0 0.8rem; }
+/* Sheikh's content has lots of blank <p><br></p> lines used as manual
+   spacing while typing — at full paragraph line-height + margin each one
+   turns into a much bigger gap than intended (doubled when two blank
+   lines are in a row). Give them one modest, fixed-size gap instead. */
+.content-body p:has(> br:only-child) { margin: 0; min-height: 0.9em; line-height: 0.9em; }
 .content-body h1, .content-body h2, .content-body h3 { color: var(--green-dark); margin: 0.9rem 0 0.5rem; }
 .content-body ul, .content-body ol { margin: 0 0 0.8rem 1.4rem; }
 .content-body blockquote {
